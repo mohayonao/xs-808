@@ -19,8 +19,14 @@
     "babel-preset-react": "^6.16.0",
     "babelify": "^7.3.0",
     "browserify": "^13.1.1",
+    "enzyme": "^2.6.0",
     "eslint": "^3.12.2",
     "eslint-plugin-react": "^6.8.0",
+    "mocha": "^3.2.0",
+    "npm-run-all": "^3.1.2",
+    "react-addons-test-utils": "^15.4.1",
+    "run-with-mocha": "^1.1.0",
+    "sinon": "^1.17.6",
     "watchify": "^3.8.0"
   },
   "homepage": "https://mohayonao.github.io/xs-808/",
@@ -30,6 +36,8 @@
   "scripts": {
     "build": "browserify src/main.js -o main-bundle.js -t [ babelify ]",
     "lint": "eslint src",
+    "test": "mocha",
+    "travis": "npm-run-all lint test",
     "watch": "watchify src/main.js -o main-bundle.js --verbose -t [ babelify ]"
   }
 }
