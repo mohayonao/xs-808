@@ -18,7 +18,7 @@ window.addEventListener("DOMContentLoaded", () => {
   const actions = bindActionCreators(actionCreators, store.dispatch);
   const Container = connect(state => state)(App);
   const audioContext = new AudioContext();
-  const sequencer = new Sequencer(audioContext);
+  const sequencer = new Sequencer(audioContext, actions);
 
   function audioHandler(action) {
     sequencer.doAction(action);

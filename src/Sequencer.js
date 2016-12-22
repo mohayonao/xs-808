@@ -3,8 +3,9 @@
 const WebAudioScheduler = require("web-audio-scheduler");
 
 class Sequencer {
-  constructor(audioContext) {
+  constructor(audioContext, actions) {
     this.audioContext = audioContext;
+    this.actions = actions;
     this.sched = new WebAudioScheduler({ context: audioContext });
     this.buffers = [];
     this.bpm = 120;
@@ -57,6 +58,7 @@ class Sequencer {
         });
       }
     });
+    this.actions.tick(this.beat);
 
     if (this.matrix[0]) {
       this.beat = (this.beat + 1) % this.matrix[0].length;
