@@ -24,6 +24,18 @@ class Sequencer {
     this.matrix = state.matrix;
   }
 
+  doAction(action) {
+    switch (action.type) {
+    case "TOGGLE_PLAY":
+      if (this.sched.state === "suspended") {
+        this.start();
+      } else {
+        this.stop();
+      }
+      break;
+    }
+  }
+
   start() {
     this.beat = 0;
     this.sched.start(this.sequence);
