@@ -1,6 +1,7 @@
 "use strict";
 
 const WebAudioScheduler = require("web-audio-scheduler");
+const NOTES = [ 0, 0, 0, 0, 61, 59, 56, 49 ];
 
 class Sequencer {
   constructor(audioContext, actions) {
@@ -60,10 +61,17 @@ class Sequencer {
     const nextPlaybackTime = playbackTime + duration;
 
     this.matrix.forEach((track, i) => {
-      if (track[this.beat] && this.buffers[i]) {
-        perc(destination, playbackTime, {
-          buffer: this.buffers[i], volume: 0.2
-        });
+      if (track[this.beat]) {
+        if (this.buffers[i]) {
+          perc(destination, playbackTime, {
+            buffer: this.buffers[i], volume: 0.2
+          });
+        }
+        if (NOTES[i]) {
+          bass(destination, playbackTime, {
+            noteNumber: NOTES[i], duration: duration, volume: 0.05
+          });
+        }
       }
     });
     this.actions.tick(this.beat);
@@ -105,6 +113,36 @@ function perc(destination, playbackTime, { buffer, volume }) {
 
   gain.gain.value = volume;
   gain.connect(destination);
+}
+
+function bass(destination, playbackTime, { noteNumber, duration, volume }) {
+  const t0 = playbackTime;
+  const t1 = t0 + duration * 0.45;
+  const t2 = t1 + duration * 0.05;
+  const audioContext = destination.context;
+  const oscillator = audioContext.createOscillator();
+  const lowpass = audioContext.createBiquadFilter();
+  const gain = audioContext.createGain();
+
+  oscillator.type = "square";
+  oscillator.frequency.value = mtof(noteNumber) * 0.25;
+  oscillator.start(t0);
+  oscillator.stop(t2);
+  oscillator.connect(lowpass);
+
+  lowpass.frequency.setValueAtTime(1000, t0);
+  lowpass.frequency.exponentialRampToValueAtTime(600, t2);
+  lowpass.Q.value = 12;
+  lowpass.connect(gain);
+
+  gain.gain.setValueAtTime(volume, t0);
+  gain.gain.setValueAtTime(volume, t1);
+  gain.gain.linearRampToValueAtTime(0, t2);
+  gain.connect(destination);
+}
+
+function mtof(midi) {
+  return 440 * Math.pow(2, (midi - 69) / 12);
 }
 
 module.exports = Sequencer;
