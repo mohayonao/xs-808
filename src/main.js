@@ -18,6 +18,12 @@ window.addEventListener("DOMContentLoaded", () => {
   const audioContext = new AudioContext();
   const sequencer = new Sequencer(audioContext);
 
+  sequencer.setState(store.getState());
+
+  store.subscribe(() => {
+    sequencer.setState(store.getState());
+  });
+
   ReactDOM.render(
     <Provider store={ store }>
       <Container actions={ actions }/>

@@ -19,6 +19,11 @@ class Sequencer {
     });
   }
 
+  setState(state) {
+    this.bpm = state.bpm;
+    this.matrix = state.matrix;
+  }
+
   start() {
     this.beat = 0;
     this.sched.start(this.sequence);
