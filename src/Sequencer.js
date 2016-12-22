@@ -34,6 +34,14 @@ class Sequencer {
         this.stop();
       }
       break;
+    case "CHANGE_VISIBILITY":
+      if (action.visibilityState === "visible") {
+        this.sched.aheadTime = 0.1;
+      } else {
+        this.sched.aheadTime = 1.0;
+        this.sched.process();
+      }
+      break;
     }
   }
 

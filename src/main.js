@@ -30,6 +30,10 @@ window.addEventListener("DOMContentLoaded", () => {
     sequencer.setState(store.getState());
   });
 
+  document.addEventListener("visibilitychange", () => {
+    actions.changeVisibility(document.visibilityState);
+  });
+
   ReactDOM.render(
     <Provider store={ store }>
       <Container actions={ actions }/>

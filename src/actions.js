@@ -13,4 +13,7 @@ module.exports = {
   tick(beat) {
     return { type: "TICK", beat };
   },
+  changeVisibility(visibilityState) {
+    return { type: "CHANGE_VISIBILITY", visibilityState };
+  },
 };
